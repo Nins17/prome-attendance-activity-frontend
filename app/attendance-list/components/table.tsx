@@ -10,8 +10,9 @@ import {
   TableRow,
   TableCaption
 } from "@/components/ui/table"
+import { socket } from "@/lib/socket";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react"
+import { use, useEffect, useState } from "react"
 
 type Attendance = {
     id:number,
@@ -21,7 +22,7 @@ type Attendance = {
 
 export default function TableComponent(){
     const [attendance, setAttendance] = useState<Attendance[]>([]);
-    const [isLoading,setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(true);
     const router = useRouter();
 
     useEffect(()=>{
@@ -36,6 +37,21 @@ export default function TableComponent(){
             setIsLoading(false);
         });
     }, []);
+
+    // Listen to the websocket for real-time updates
+    useEffect(() => {
+        socket.on("attendance_create", (payload) => {
+            console.log("Received websocket event:", payload);
+
+            setAttendance(prev => [...prev, payload.data]);
+
+        })
+
+        // Cleanup on unmount
+        return () => {
+            socket.off("attendance_create");
+        }
+    })
 
     if (isLoading) return (
         <div className="flex items-center justify-center h-64">
