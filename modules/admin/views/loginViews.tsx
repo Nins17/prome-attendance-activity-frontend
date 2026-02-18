@@ -1,27 +1,46 @@
-"use client"
+"use client";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 const LoginViews = () => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [admins, setAdmins] = useState([]);
 
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
+  const router = useRouter();
 
-    const handleLogin = () => {
-        console.log(username)
-        console.log(password);
+  const handleLogin = async () => {
 
-        setUsername("");
-        setPassword("");
+
+    try {
+      const response = await axios.post("http://localhost:3000/admin/login", {
+        username,
+        password
+      })
+
+      if (response.data.success) {
+        localStorage.setItem("admin", JSON.stringify(response.data.admin))
+
+        alert('Welcome, Admin!');
+        router.push('/admin')
+      }else{
+        console.log(response.data.error);
+      }
+    } catch (err) {
+      console.log(err);
     }
+
+    setUsername("");
+    setPassword("");
+  };
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-gray-200 via-gray-100 to-gray-200">
-      
       <div className="w-[420px] p-10 flex flex-col items-center rounded-2xl shadow-2xl bg-white">
-        
         <div className="mb-6">
           <h1 className="text-3xl font-extrabold text-teal-600 text-center">
             Admin Portal
@@ -32,23 +51,23 @@ const LoginViews = () => {
         </div>
 
         <div className="flex flex-col gap-5 w-full">
-          <Input 
-            type="text" 
-            placeholder="Username" 
+          <Input
+            type="text"
+            placeholder="Username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             className="w-full rounded-lg border border-gray-300 shadow-sm placeholder-gray-400 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-gray-700"
           />
-          <Input 
-            type="password" 
-            placeholder="Password" 
+          <Input
+            type="password"
+            placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="w-full rounded-lg border border-gray-300 shadow-sm placeholder-gray-400 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-gray-700"
           />
         </div>
 
-        <Button 
+        <Button
           className="mt-6 w-full bg-teal-600 text-white hover:bg-teal-700 rounded-lg shadow-lg transition-all duration-300"
           onClick={handleLogin}
         >
@@ -58,7 +77,6 @@ const LoginViews = () => {
         <p className="mt-4 text-sm text-gray-500 hover:text-gray-700 cursor-pointer">
           Forgot your password?
         </p>
-
       </div>
     </div>
   );
