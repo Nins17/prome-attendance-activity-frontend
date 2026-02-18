@@ -1,52 +1,62 @@
 'use client';
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+type Attendance = {
+  id: number;
+  fullname: string;
+  schedule: string;
+};
 
-export default function Home() {
+type Props = {
+  data: Attendance;
+  onClose: () => void;
+};
+
+export default function UpdateSheetComponent({ data, onClose }: Props) {
   const [fullname, setFullname] = useState("");
-  const [schedule, setSchedule] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [schedule, setSchedule] = useState(""); 
+  const [updating, setUpdating] = useState(false);
   const [message, setMessage] = useState("");
 
-  const handleSubmitSched = async (e: React.FormEvent<HTMLFormElement>) => {
+    //   const { id } = useParams();
+    //   const router = useRouter();
+
+  useEffect(() => {
+    setFullname(data.fullname);
+    setSchedule(data.schedule);
+  }, [data]);
+
+  const handleUpdate = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    // Basic validation
-    if (!fullname.trim() || !schedule) {
-      setMessage("⚠️ Please fill out all fields.");
-      return;
-    }
-
-    setLoading(true);
+    setUpdating(true);
     setMessage("");
+  
 
     try {
-      const res = await fetch("http://localhost:3000/attendance", {
-        method: "POST",
+      await fetch(`http://localhost:3000/attendance/${data.id}`, {
+        method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ fullname, schedule }),
       });
 
-      if (!res.ok) throw new Error("Failed to submit");
-
-      setFullname("");
-      setSchedule("");
-
-      setMessage("  Attendance submitted successfully!");
+    
+        setMessage("Updated successfully!");
+        setTimeout(() => onClose(), 800);
     } catch (err) {
-      console.error(err);
-      setMessage("Error submitting attendance.");
+      setMessage("Error updating data.");
     }
 
-    setLoading(false);
+    setUpdating(false);
   };
 
+ 
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100 font-sans">
-      <main className="w-full max-w-lg bg-white p-10 shadow-xl rounded-xl">
-        
-        <h1 className="text-2xl font-bold text-center mb-6 text-gray-800">
-          Attendance Registration
+    <div className="flex min-h-screen items-center justify-center bg-gray-100 p-6">
+      <main className="w-full max-w-lg bg-white shadow-xl rounded-xl p-8">
+
+        <h1 className="text-2xl font-bold text-gray-800 text-center mb-4">
+          Update Attendance
         </h1>
 
         {message && (
@@ -54,8 +64,6 @@ export default function Home() {
             className={`mb-4 p-3 rounded-lg text-center font-medium ${
               message.startsWith("❌")
                 ? "bg-red-100 text-red-700"
-                : message.startsWith("⚠️")
-                ? "bg-yellow-100 text-yellow-700"
                 : "bg-green-100 text-green-700"
             }`}
           >
@@ -63,21 +71,20 @@ export default function Home() {
           </div>
         )}
 
-        <form onSubmit={handleSubmitSched} className="space-y-4">
+        <form onSubmit={handleUpdate} className="space-y-4">
 
           {/* Full Name */}
           <div className="flex flex-col">
-            <label htmlFor="fullname" className="text-gray-700 font-medium">
+            <label htmlFor="fullname" className="text-gray-700 font-medium mb-1">
               Full Name
             </label>
             <input
               type="text"
               id="fullname"
-              placeholder="e.g. Juan Dela Cruz"
+              placeholder="Enter full name"
               value={fullname}
               onChange={(e) => setFullname(e.target.value)}
-              className="border rounded-lg p-2 mt-1 focus:ring-2 focus:ring-blue-400 outline-none"
-              required
+              className="border rounded-lg p-3 outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
@@ -92,18 +99,18 @@ export default function Home() {
               <option value="Day2">Day 2</option>
             </select>
           </div>
-
+          
           {/* Submit Button */}
           <button
             type="submit"
-            disabled={loading}
-            className={`w-full py-2 mt-4 rounded-lg text-white font-semibold transition ${
-              loading
+            disabled={updating}
+            className={`w-full py-3 mt-4 rounded-lg text-white font-semibold transition ${
+              updating
                 ? "bg-blue-300 cursor-not-allowed"
                 : "bg-blue-500 hover:bg-blue-600"
             }`}
           >
-            {loading ? "Submitting..." : "Submit Attendance"}
+            {updating ? "Updating..." : "Update"}
           </button>
         </form>
       </main>
