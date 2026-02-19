@@ -32,7 +32,7 @@ const AdminViews = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="w-full h-20 bg-gradient-to-r from-teal-600 to-teal-500 shadow-md flex items-center px-8">
+      <div className="w-full h-20 bg-linear-to-br from-black to-gray-950 shadow-md flex items-center px-8">
         <h1 className="text-2xl font-bold text-white">Admin Dashboard</h1>
       </div>
 
