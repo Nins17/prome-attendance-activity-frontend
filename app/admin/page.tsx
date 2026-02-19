@@ -1,11 +1,8 @@
-import AdminViews from "@/modules/admin/views/adminViews";
+import LoginViews from "./component/views/loginViews";
 
-export const AdminPage = () => {
-    return (
-        <div>
-            <AdminViews />
-        </div>
-    )
+export const LoginPage = () => {
+    return <LoginViews />;
 }
 
-export default AdminPage;
+
+export default LoginPage;

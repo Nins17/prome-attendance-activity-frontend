@@ -1,6 +1,6 @@
 "use client";
 
-import TableComponent from "@/app/attendance-list/components/table";
+import TableComponent from "@/app/admin/component/table-components/attendance-list-table";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { LayoutDashboard, User, Settings, LogOut, ChevronDown } from "lucide-react";

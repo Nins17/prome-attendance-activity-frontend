@@ -1,6 +1,7 @@
 'use client'
 
 import { Button } from "@/components/ui/button"
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import {
   Table,
   TableBody,
@@ -10,8 +11,8 @@ import {
   TableRow,
   TableCaption
 } from "@/components/ui/table"
+import UpdateSheetComponent from "@/app/admin/component/update-components/update-sheet";
 import { socket } from "@/lib/socket";
-import { useRouter } from "next/navigation";
 import { use, useEffect, useState } from "react"
 
 type Attendance = {
@@ -23,7 +24,8 @@ type Attendance = {
 export default function TableComponent(){
     const [attendance, setAttendance] = useState<Attendance[]>([]);
     const [isLoading, setIsLoading] = useState(true);
-    const router = useRouter();
+    const [open, setOpen] = useState(false);
+    const [selected, setSelected] = useState<Attendance | null>(null);
 
     useEffect(()=>{
         fetch("http://localhost:3000/attendance")
@@ -58,7 +60,6 @@ export default function TableComponent(){
             <p className="text-gray-500 text-lg">Loading attendance data...</p>
         </div>
     );
-
     return (
         <div className="min-h-screen flex flex-col items-center justify-start p-6 bg-gray-50">
             <div className="w-full max-w-6xl bg-white rounded-lg shadow-lg p-6 space-y-4">
@@ -93,7 +94,10 @@ export default function TableComponent(){
                                     <TableCell className="px-4 py-3 text-center text-gray-700">{data.schedule}</TableCell>
                                     <TableCell className="px-4 py-3 text-center">
                                         <Button 
-                                            onClick={() => router.push(`../update/${data.id}`)} 
+                                             onClick={() => {
+                                                    setSelected(data);
+                                                    setOpen(true);
+                                                }} 
                                             className="bg-green-600 hover:bg-green-700 text-white"
                                         >
                                             Update
@@ -103,6 +107,21 @@ export default function TableComponent(){
                             ))}
                         </TableBody>
                     </Table>
+
+                    <Sheet open={open} onOpenChange={setOpen}>
+                        <SheetContent>
+                            <SheetHeader>
+                            <SheetTitle>Update Attendance</SheetTitle>
+                            </SheetHeader>
+
+                            {selected && (
+                            <UpdateSheetComponent
+                                data={selected}
+                                onClose={() => setOpen(false)}
+                            />
+                            )}
+                        </SheetContent>
+                     </Sheet>
                 </div>
             </div>
         </div>
