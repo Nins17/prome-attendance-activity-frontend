@@ -33,7 +33,7 @@ const LoginViews = () => {
           text: "Welcome, Admin!",
         });
 
-        router.push("/admin");
+        router.push("/admin/dashboard");
       } else {
         // Error message
         setMessage({

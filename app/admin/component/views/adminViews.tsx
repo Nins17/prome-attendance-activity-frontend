@@ -37,7 +37,7 @@ const AdminViews = () => {
 
   const handleSignOut = () => {
     localStorage.removeItem("admin");
-    router.push("/admin/login");
+    router.push("/admin");
   };
 
   if (isChecking)
