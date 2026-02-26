@@ -2,7 +2,7 @@
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 
@@ -29,7 +29,7 @@ const LoginViews = () => {
         // Success message
         setMessage({
           type: "success",
-          text: "Welcome, Admin!",
+          text: "Logging In...",
         });
 
         router.push("/admin/dashboard");
