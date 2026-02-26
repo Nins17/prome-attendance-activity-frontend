@@ -22,7 +22,7 @@ const AdminViews = () => {
     const timeout = setTimeout(() => {
       const admin = localStorage.getItem("admin");
       if (!admin) {
-        router.push("/admin/login");
+        router.push("/admin");
       } else {
         const parsedAdmin = JSON.parse(admin);
           console.log("Parsed admin data:", parsedAdmin);

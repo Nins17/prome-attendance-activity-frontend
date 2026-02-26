@@ -32,8 +32,6 @@ const LoginViews = () => {
           text: "Logging In...",
         });
 
-        
-
         router.push("/admin/dashboard");
       } else {
         // Error message
