@@ -9,7 +9,6 @@ import { useRouter } from "next/navigation";
 const LoginViews = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [admins, setAdmins] = useState([]);
   const [message, setMessage] = useState({ type: "", text: "" });
 
   const router = useRouter();
