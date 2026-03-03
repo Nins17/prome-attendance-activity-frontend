@@ -36,6 +36,7 @@ interface Attendance {
   ref_id: string;
   fullname: string;
   schedule: string;
+  ref_id: string;
 };
 
 interface TableProps {
@@ -66,9 +67,11 @@ export default function TableComponent({results}: TableProps) {
   }, []);
 
   // Handle filtering by schedule
-  const handleFilter = async ( schedule: string ) => {
-    try{
-      const response = await axios.get(`http://localhost:3000/attendance/schedule/${schedule}`);
+  const handleFilter = async (schedule: string) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:3000/attendance/schedule/${schedule}`,
+      );
 
       if (schedule.toLocaleLowerCase() === "all") {
         const allResponse = await axios.get("http://localhost:3000/attendance");
@@ -82,10 +85,10 @@ export default function TableComponent({results}: TableProps) {
 
       setSelectedSched(schedule);
       setAttendance(response.data);
-    } catch(err){
+    } catch (err) {
       console.log(err);
     }
-  }
+  };
 
   // Listen to the websocket for real-time updates
   useEffect(() => {
@@ -179,8 +182,9 @@ export default function TableComponent({results}: TableProps) {
             <TableHeader>
               <TableRow className="bg-gray-100 text-gray-700 uppercase text-sm">
                 <TableHead className="px-4 py-3 text-center">ID</TableHead>
-                <TableHead className="px-4 py-3 text-left">Fullname</TableHead>
-                <TableHead className="px-4 py-3 text-center">
+                <TableHead className="px-8 py-3 text-left">Fullname</TableHead>
+                <TableHead className="px-7 py-3 text-left">Reference ID</TableHead>
+                <TableHead className="px-2 py-3 text-center">
                   Schedule Picked
                 </TableHead>
                 <TableHead className="px-4 py-3 text-center">Action</TableHead>
@@ -197,12 +201,19 @@ export default function TableComponent({results}: TableProps) {
                   <TableCell className="px-4 py-3 text-center text-gray-700">
                     {data.id}
                   </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-700">
+
+                  <TableCell className="px-8 py-3 text-gray-700">
                     {data.fullname}
                   </TableCell>
+
+                  <TableCell className="px-7 py-3 text-gray-700">
+                    {data.ref_id}
+                  </TableCell>
+
                   <TableCell className="px-4 py-3 text-center text-gray-700">
                     {data.schedule}
                   </TableCell>
+
                   <TableCell className="px-4 py-3 text-center">
                     <Button
                       onClick={() => {
