@@ -36,7 +36,6 @@ interface Attendance {
   ref_id: string;
   fullname: string;
   schedule: string;
-  ref_id: string;
 };
 
 interface TableProps {
