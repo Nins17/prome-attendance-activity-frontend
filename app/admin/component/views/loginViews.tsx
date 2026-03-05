@@ -18,7 +18,7 @@ const LoginViews = () => {
     setMessage({ type: "", text: "" });
 
     try {
-      const response = await axios.post("http://localhost:3000/admin/login", {
+      const response = await axios.post("/admin/login", {
         username,
         password,
       });
