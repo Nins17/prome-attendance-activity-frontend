@@ -18,7 +18,7 @@ const LoginViews = () => {
     setMessage({ type: "", text: "" });
 
     try {
-      const response = await axios.post("/admin/login", {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/admin/login`, {
         username,
         password,
       });
