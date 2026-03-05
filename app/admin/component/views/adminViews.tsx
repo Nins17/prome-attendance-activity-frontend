@@ -58,7 +58,7 @@ const AdminViews = () => {
   };
 
    useEffect(() => {
-    fetch("http://localhost:3000/attendance")
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/attendance`)
       .then((res) => res.json())
       .then((data) => {
         setSearchResult(data);
@@ -73,14 +73,14 @@ const AdminViews = () => {
     const query = searchInput.trim();
 
     if (!query) {
-      const response = await axios.get('http://localhost:3000/attendance');
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/attendance`);
       setSearchResult(response.data);
       return;
     }
 
     try {
       const response = await axios.get(
-        'http://localhost:3000/attendance/search',
+        `${process.env.NEXT_PUBLIC_API_URL}/attendance/search`,
         { params: { input: query } }
       );
       console.log('API response:', response.data);
@@ -101,14 +101,14 @@ const AdminViews = () => {
 
     if (schedule.toLowerCase() === "all") {
       const res = await axios.get(
-        "http://localhost:3000/attendance"
+       `${process.env.NEXT_PUBLIC_API_URL}/attendance`
       );
       setSearchResult(res.data);
       return;
     }
 
     const res = await axios.get(
-      `http://localhost:3000/attendance/schedule/${schedule}`
+      `${process.env.NEXT_PUBLIC_API_URL}/attendance/schedule/${schedule}`
     );
 
     setSearchResult(res.data);
@@ -216,7 +216,7 @@ const AdminViews = () => {
                   const query = e.target.value.trim();
                   if (query === '') {
                        axios
-                        .get('http://localhost:3000/attendance')
+                        .get(`${process.env.NEXT_PUBLIC_API_URL}/attendance`)
                         .then(res => setSearchResult(res.data)) // if res.data = [], tableData = []
                         .catch(err => {
                           console.error(err);
