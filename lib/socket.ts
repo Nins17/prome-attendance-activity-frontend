@@ -5,6 +5,6 @@ import { io } from "socket.io-client";
 //     transports: ["websocket"],
 // })
 
-export const socket = io(process.env.FRONTEND_URL, {
+export const socket = io(process.env.NEXT_PUBLIC_API_URL, {
     transports: ["websocket"],
 })
